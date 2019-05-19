@@ -1,4 +1,5 @@
 #!/bin/bash
+#./usermanger.sh test windows bpmuat-win del
 user=$1
 system=$2
 environment=$3
