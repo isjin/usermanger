@@ -1,0 +1,16 @@
+---
+- hosts: {hosts}
+  gather_facts: no
+  tasks:
+    - name: Add new user
+      win_user :
+        name: {user}
+        password: {password}
+        password_never_expires: no
+        state: present
+        user_cannot_change_password: yes
+        groups: 
+          - Users
+          - Remote Desktop Users
+          - {group1}
+      

@@ -1,0 +1,22 @@
+---
+- hosts: {hosts}
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: delete user
+      user:
+        name: {user}
+        state: absent
+        
+    - name: delete user group
+      group:
+        name: {user}
+        state: absent
+        
+    - name: delete home and sudoer permission
+      shell: "{{item}}"
+      ignore_errors: yes
+      with_items:
+        - sudo rm -rf /home/{user}
+        - sudo rm -rf /etc/sudoers.d/{user}
+      

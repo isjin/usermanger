@@ -1,0 +1,16 @@
+set-executionpolicy remotesigned
+
+winrm quickconfig
+
+winrm enumerate winrm/config/listener
+
+winrm set winrm/config/service/auth '@{Basic="true"}'
+
+winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+
+
+net user jlradmin wEf5inJ0f!@t /add
+
+wmic USERACCOUNT WHERE "Name='jlradmin'" set PasswordExpires=FALSE
+
+net localgroup Administrators jlradmin  /add

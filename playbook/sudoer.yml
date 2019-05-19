@@ -1,0 +1,7 @@
+---
+- hosts: {hosts}
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: sudoer permission
+      shell: sudo echo "%{user} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/{user}

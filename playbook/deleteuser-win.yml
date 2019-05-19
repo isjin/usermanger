@@ -1,0 +1,9 @@
+---
+- hosts: {hosts}
+  gather_facts: no
+  tasks:
+    - name: Delete user
+      win_user :
+        name: {user}
+        state: absent
+      
