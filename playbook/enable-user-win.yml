@@ -1,0 +1,8 @@
+---
+- hosts: {hosts}
+  gather_facts: no
+  tasks:
+    - name: disable user
+      win_user :
+        name: {user}
+        account_disabled: no
