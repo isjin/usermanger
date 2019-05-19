@@ -1,5 +1,5 @@
 #!/bin/bash
-#./usermanger.sh test windows bpmuat-win del
+#./usermanger.sh test linux local add
 user=$1
 system=$2
 environment=$3
@@ -15,7 +15,7 @@ if [ $operator == "add" ];then
 	ansible-playbook $path/local-adduser-linux.yml
 	rm -rf $path/local-adduser-linux.yml
 	echo "Bastion ssh key passphrase:" >> $path/ssh_key/$user/$user\.txt
-	tail -n 1 log/bastion_ssh_key.txt >> $path/ssh_key/$user/$user\.txt
+	tail -n 1 $path/log/bastion_ssh_key.txt >> $path/ssh_key/$user/$user\.txt
 else
 	sed "s/{hosts}/local/g" $path/playbook/deleteuser-linux.yml > $path/local-adduser-linux.yml
 	sed -i "s/{user}/$user/g" $path/local-adduser-linux.yml
@@ -29,14 +29,15 @@ if [ $system == "windows" ];then
 		bash $path/passwdgenerate.sh $user 2
 		password=`more $path/passwd_tmp`
 		echo "Windows server login user infomation:" >> $path/ssh_key/$user/$user\.txt
-		tail -n 1 log/user.txt >> ssh_key/$user/$user\.txt
+		tail -n 1 $path/log/user.txt >> ssh_key/$user/$user\.txt
 		sed "s/{hosts}/$environment/g" $path/playbook/adduser-win.yml > $path/$environment\-adduser-win.yml
 		sed -i "s/{user}/$user/g" $path/$environment\-adduser-win.yml
 		sed -i "s/{password}/$password/g" $path/$environment\-adduser-win.yml
 		sed -i "s/{group1}/$permission/g" $path/$environment\-adduser-win.yml
 		ansible-playbook $path/$environment\-adduser-win.yml
 		rm -rf $path/$environment\-adduser-win.yml
-		zip $path/$user $path/ssh_key/$user/*
+		cd $path/ssh_key
+		zip $path/$user $user/*
 	else
 		sed "s/{hosts}/$environment/g" $path/playbook/deleteuser-win.yml > $path/$environment\-deleteuser-win.yml
 		sed -i "s/{user}/$user/g" $path/$environment\-deleteuser-win.yml
@@ -58,7 +59,8 @@ else
 			ansible-playbook $path/$environment\-sudoer.yml
 			rm -rf $path/$environment\-sudoer.yml
 		fi
-		zip $path/$user $path/ssh_key/$user/*
+		cd $path/ssh_key
+		zip $path/$user $user/*
 	else
 		sed "s/{hosts}/$environment/g" $path/playbook/deleteuser-linux.yml > $path/$environment\-deleteuser-linux.yml
 		sed -i "s/{user}/$user/g" $path/$environment\-deleteuser-linux.yml
