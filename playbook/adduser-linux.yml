@@ -21,3 +21,15 @@
         user: {user}
         state: present
         key: "{{ lookup('file', '{sshkey}') }}"
+        
+    - name: chmod ssh permission
+      file:
+        path: /home/{user}/.ssh
+        state: present
+        mode: '0700'
+    
+    - name: chmod ssh authorized_key permission
+      file:
+        path: /home/{user}/.ssh/authorized_key
+        state: present
+        mode: '0600'
